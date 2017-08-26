@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  plan: one
+  representation: 
+  name: MyString
+  description: MyText
+
+two:
+  plan: two
+  representation: 
+  name: MyString
+  description: MyText
