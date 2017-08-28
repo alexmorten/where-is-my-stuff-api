@@ -1,9 +1,9 @@
 class PlansController < ApplicationController
   before_action :set_plan, only: [:show, :update, :destroy]
-
+  before_action :authenticate_user!
   # GET /plans
   def index
-    @plans = Plan.all
+    @plans = @current_user.plans
 
     render json: @plans
   end
@@ -16,7 +16,7 @@ class PlansController < ApplicationController
   # POST /plans
   def create
     @plan = Plan.new(plan_params)
-
+    @plan.user = @current_user
     if @plan.save
       render json: @plan, status: :created, location: @plan
     else

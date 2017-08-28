@@ -1,10 +1,14 @@
 class ItemsController < ApplicationController
   before_action :set_item, only: [:show, :update, :destroy]
-
+  before_action :authenticate_user!
   # GET /items
   def index
-    @items = Item.all
-
+    limit = params[:limit] && params[:limit].to_i <=1000 ? params[:limit] : 20
+    query = params[:query] || ""
+    if !@items
+    @items = @current_user.items
+    end
+    @items = @items.where("LOWER(name) LIKE LOWER(?) OR LOWER(description) LIKE LOWER(?)","%#{query}%","%#{query}%")
     render json: @items
   end
 
@@ -16,7 +20,7 @@ class ItemsController < ApplicationController
   # POST /items
   def create
     @item = Item.new(item_params)
-
+    @item.user = @current_user
     if @item.save
       render json: @item, status: :created, location: @item
     else
@@ -46,6 +50,8 @@ class ItemsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def item_params
-      params.require(:item).permit(:plan_id, :representation, :name, :description)
+      params.require(:item).permit(:plan_id, :name, :description).tap do |whitelisted|
+        whitelisted[:representation] = params[:item].fetch(:representation, ActionController::Parameters.new).permit!
+      end
     end
 end
