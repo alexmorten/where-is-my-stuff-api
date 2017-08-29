@@ -54,7 +54,7 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
   address: "localhost",
   port: 1025,
-  domain: "where-is-my-stuff-api.herokuapp.com",
+  domain: "wims-api.herokuapp.com",
   authentication: "plain",
   enable_starttls_auto: true,
   user_name: ENV["GMAIL_USERNAME"],
