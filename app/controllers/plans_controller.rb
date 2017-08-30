@@ -5,12 +5,12 @@ class PlansController < ApplicationController
   def index
     @plans = @current_user.plans
 
-    render json: @plans
+    render json: @plans, current_user: @current_user
   end
 
   # GET /plans/1
   def show
-    render json: @plan
+    render json: @plan, current_user: @current_user
   end
 
   # POST /plans
@@ -26,6 +26,10 @@ class PlansController < ApplicationController
 
   # PATCH/PUT /plans/1
   def update
+    if @current_user != @plan.user
+      render json: {error:"not allowed"},status:401
+      return
+    end
     if @plan.update(plan_params)
       render json: @plan
     else
@@ -35,6 +39,10 @@ class PlansController < ApplicationController
 
   # DELETE /plans/1
   def destroy
+    if @current_user != @plan.user
+      render json: {error:"not allowed"},status:401
+      return
+    end
     @plan.destroy
   end
 
