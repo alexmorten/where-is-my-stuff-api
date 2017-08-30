@@ -3,7 +3,7 @@ class ItemsController < ApplicationController
   before_action :authenticate_user!
   # GET /items
   def index
-    limit = params[:limit] && params[:limit].to_i <=1000 ? params[:limit] : 20
+    limit = params[:limit] && params[:limit].to_i <=1000 ? params[:limit] : 100
     query = params[:query] || ""
     if !@items
     @items = @current_user.items
